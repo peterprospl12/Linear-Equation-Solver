@@ -64,20 +64,20 @@ public:
         this->matrix = new_vector;
     }
 
-    Matrix<T> triu(int k=0){
+    Matrix<T> triu(int k = 0) {
         Matrix<T> new_vector(this->row_size, this->col_size);
-        for(int i=0;i<this->row_size;i++){
-            for(int j=i+k;j<this->col_size;j++){
+        for (int i = 0; i < this->row_size; i++) {
+            for (int j = i + k; j < this->col_size; j++) {
                 new_vector[i][j] = this->matrix[i][j];
             }
         }
         return new_vector;
     }
 
-    Matrix<T> tril(int k=0) {
+    Matrix<T> tril(int k = 0) {
         Matrix<T> new_vector(this->row_size, this->col_size);
-        for(int i=0;i<this->row_size;i++){
-            for(int j=0;j<=i+k;j++){
+        for (int i = 0; i < this->row_size; i++) {
+            for (int j = 0; j <= i + k; j++) {
                 new_vector[i][j] = this->matrix[i][j];
             }
         }
@@ -85,49 +85,46 @@ public:
     }
 
     Matrix<T> diag() {
-        if(this->col_size == this->row_size) {
+        if (this->col_size == this->row_size) {
             Matrix<T> new_vector(this->col_size, 1);
-            for(int i=0;i<this->row_size;i++){
+            for (int i = 0; i < this->row_size; i++) {
                 new_vector[i][0] = this->matrix[i][i];
             }
             return new_vector;
-        }
-        else if(this->col_size == 1 || this->row_size == 1){
+        } else if (this->col_size == 1 || this->row_size == 1) {
             int size = 0;
-            if(col_size == 1){
+            if (col_size == 1) {
                 size = row_size;
-            }
-            else {
+            } else {
                 size = col_size;
             }
 
             Matrix<T> new_matrix(size, size);
             int counter = 0;
-            for(auto row: this->matrix){
-                for(auto value: row){
+            for (auto row: this->matrix) {
+                for (auto value: row) {
                     new_matrix[counter][counter] = value;
                     counter++;
                 }
             }
             return new_matrix;
-        }
-        else {
+        } else {
             throw std::invalid_argument("Invalid matrix size");
         }
     }
 
     std::pair<Matrix<T>, Matrix<T>> lu() {
-        if(this->col_size != this->row_size) {
+        if (this->col_size != this->row_size) {
             throw std::invalid_argument("Invalid matrix size");
         }
         int m = this->col_size;
         auto U = *this;
         auto L = eye(m);
 
-        for(int i=1; i<m; i++) {
-            for(int j=0; j<i; j++){
+        for (int i = 1; i < m; i++) {
+            for (int j = 0; j < i; j++) {
                 L[i][j] = U[i][j] / U[j][j];
-                for(int z=0; z<m; z++) {
+                for (int z = 0; z < m; z++) {
                     U[i][z] -= L[i][j] * U[j][z];
                 }
             }
@@ -221,14 +218,14 @@ public:
 
         for (int i = 0; i < A.getRowSize(); i++) {
             for (int j = 0; j < A.getColSize(); j++) {
-                new_vector[i][0] += A[i][j] * x[j][0];ja
+                new_vector[i][0] += A[i][j] * x[j][0];
             }
             new_vector[i][0] -= b[i][0];
         }
         return new_vector;
     }
 
-    static double norm(const Matrix<T>& v) {
+    static double norm(const Matrix<T> &v) {
         if (v.getColSize() > 1 && v.getRowSize() > 1) {
             throw std::invalid_argument("Invalid vector size");
         }
@@ -241,21 +238,21 @@ public:
         return sqrt(sum);
     }
 
-    static double norm(Matrix<T>& v) {
-        return norm(const_cast<const Matrix<T>&>(v));
+    static double norm(Matrix<T> &v) {
+        return norm(const_cast<const Matrix<T> &>(v));
     }
 
     static Matrix<T> eye(int m) {
-        Matrix<T> new_matrix(m,m);
-        for(int i=0;i<m;i++){
+        Matrix<T> new_matrix(m, m);
+        for (int i = 0; i < m; i++) {
             new_matrix[i][i] = 1;
         }
         return new_matrix;
     }
 
 
-
-    static Matrix<T> jacobi_solution(Matrix<T>& A, Matrix<T>& b, int max_iterations, double error_norm_value){
+    static Matrix<T>
+    jacobi_solution(Matrix<T> &A, Matrix<T> &b, int max_iterations, double error_norm_value, double *duration_out) {
         std::clock_t start;
         double duration;
         start = std::clock();
@@ -265,11 +262,11 @@ public:
 
         std::vector<double> error_norms(max_iterations);
         int iteration;
-
-        for(iteration = 0; iteration < max_iterations; iteration++) {
-            for (int i = 0; i < A.getColSize(); i++) {
+        int size = A.getColSize();
+        for (iteration = 0; iteration < max_iterations; iteration++) {
+            for (int i = 0; i < size; i++) {
                 double temp_sum = 0;
-                for (int j = 0; j < A.getColSize(); j++) {
+                for (int j = 0; j < size; j++) {
                     if (j == i) {
                         continue;
                     }
@@ -282,24 +279,27 @@ public:
             temp_x = x;
 
             error_norms[iteration] = norm(residuum(A, x, b));
-            if(error_norms[iteration] < error_norm_value || std::isinf(error_norms[iteration])) {
+            if (error_norms[iteration] < error_norm_value || std::isinf(error_norms[iteration])) {
                 iteration++;
                 break;
             }
 
         }
         duration = static_cast<double>(std::clock() - start) / CLOCKS_PER_SEC;
-
-        to_csv(error_norms, "Jacobi solution", iteration, "jacobi_solution_error_norm");
+        if (duration_out != nullptr) {
+            *duration_out = duration;
+        }
+        to_csv(error_norms, duration, A[0][0], size, iteration, "jacobi_error_norm");
         std::cout << "Jacobi solution" << std::endl;
         std::cout << "Iterations: " << iteration << std::endl;
-        std::cout << "Error norm: " << error_norms[iteration-1] << std::endl;
+        std::cout << "Error norm: " << error_norms[iteration - 1] << std::endl;
         std::cout << "Duration: " << duration << std::endl;
         return x;
 
     }
 
-    static Matrix<T> gauss_seidel_solution(Matrix<T>& A, Matrix<T>& b, int max_iterations, double error_norm_value){
+    static Matrix<T> gauss_seidel_solution(Matrix<T> &A, Matrix<T> &b, int max_iterations, double error_norm_value,
+                                           double *duration_out) {
         std::clock_t start;
         double duration;
         start = std::clock();
@@ -307,11 +307,12 @@ public:
         Matrix<T> x(A.getColSize(), 1);
         std::vector<double> error_norms(max_iterations);
         int iteration;
+        int size = A.getColSize();
 
-        for(iteration = 0; iteration < max_iterations; iteration++) {
-            for (int i = 0; i < A.getColSize(); i++) {
+        for (iteration = 0; iteration < max_iterations; iteration++) {
+            for (int i = 0; i < size; i++) {
                 double temp_sum = 0;
-                for (int j = 0; j < A.getColSize(); j++) {
+                for (int j = 0; j < size; j++) {
                     if (j == i) {
                         continue;
                     }
@@ -321,25 +322,28 @@ public:
             }
 
             error_norms[iteration] = norm(residuum(A, x, b));
-            if(error_norms[iteration] < error_norm_value || std::isinf(error_norms[iteration]) || std::isnan(error_norms[iteration])) {
+            if (error_norms[iteration] < error_norm_value || std::isinf(error_norms[iteration]) ||
+                std::isnan(error_norms[iteration])) {
                 iteration++;
                 break;
             }
 
         }
         duration = static_cast<double>(std::clock() - start) / CLOCKS_PER_SEC;
-
-        to_csv(error_norms, "Gauss Seidel solution", iteration, "gauss_seidel_solution_error_norm");
+        if (duration_out != nullptr) {
+            *duration_out = duration;
+        }
+        to_csv(error_norms, duration, A[0][0], size, iteration, "gauss_seidel_error_norm");
         std::cout << "Gauss Seidel solution" << std::endl;
         std::cout << "Iterations: " << iteration << std::endl;
-        std::cout << "Error norm: " << error_norms[iteration-1] << std::endl;
+        std::cout << "Error norm: " << error_norms[iteration - 1] << std::endl;
         std::cout << "Duration: " << duration << std::endl;
 
         return x;
 
     }
 
-    static Matrix<T> LU_solution(Matrix<T>& A, Matrix<T>& b) {
+    static Matrix<T> LU_solution(Matrix<T> &A, Matrix<T> &b, double *error_norm_out, double *duration_out) {
         std::clock_t start;
         double duration;
         start = std::clock();
@@ -349,35 +353,37 @@ public:
         auto U = a.second;
 
         Matrix<T> x(A.getColSize(), 1);
-        // A = L x U
-        // (L x U) x X = B
-        // L x (U x X) = B
-        // U x X = Y
-        // L x Y = B
         auto y = x;
         int size = A.col_size;
 
 
         // Ly = B
-        for(int i=0;i<size; i++){
+        for (int i = 0; i < size; i++) {
             double temp_sum = 0;
-            for(int j=0; j<i; j++) {
+            for (int j = 0; j < i; j++) {
                 temp_sum += L[i][j] * y[j][0];
             }
             y[i][0] = b[i][0] - temp_sum;
         }
 
         // Ux = y
-        for(int i=size-1 ;i>=0; i--){
+        for (int i = size - 1; i >= 0; i--) {
             double temp_sum = 0;
-            for(int j=i; j<size; j++) {
+            for (int j = i; j < size; j++) {
                 temp_sum += U[i][j] * x[j][0];
             }
             x[i][0] = (y[i][0] - temp_sum) / U[i][i];
         }
         duration = static_cast<double>(std::clock() - start) / CLOCKS_PER_SEC;
 
-        double error_norm = norm(residuum(A,x,b));
+        double error_norm = norm(residuum(A, x, b));
+
+        if (error_norm_out != nullptr) {
+            *error_norm_out = error_norm;
+        }
+        if (duration_out != nullptr) {
+            *duration_out = duration;
+        }
         std::cout << "LU Factorization solution" << std::endl;
         std::cout << "Error norm: " << error_norm << std::endl;
         std::cout << "Duration: " << duration << std::endl;
@@ -385,20 +391,24 @@ public:
     }
 
 
-
 private:
-    static void to_csv(std::vector<T>& error_norms, const std::string& name, int iterations, const std::string& file_name){
+    static void to_csv(std::vector<T> &error_norms, double duration, int a1, int size, int iterations,
+                       const std::string &file_name) {
         std::fstream file;
-        file.open(file_name+".csv", std::fstream::out);
-        file << "Error norm\n";
+        std::string name = file_name + "_" + std::to_string(a1) + "_" + std::to_string(size) + ".csv";
+        file.open(name, std::fstream::out);
+        file << "Error norm,Size,Duration\n";
         file << std::setprecision(std::numeric_limits<double>::max_digits10);
-        for(int i=0; i< iterations; i++){
+        for (int i = 0; i < iterations; i++) {
             file << error_norms[i];
-            if(i < iterations-1){
-                file << "\n";
+            if (i == 0) {
+                file << "," << size << "," << duration << "\n";
+            } else if (i < iterations - 1) {
+                file << ",,\n";
             }
         }
-        file.close();    }
+        file.close();
+    }
 
 
 };

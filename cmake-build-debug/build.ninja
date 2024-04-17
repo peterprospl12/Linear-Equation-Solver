@@ -56,8 +56,15 @@ build CMakeFiles/Solving_Linear_Equations.dir/main.cpp.o: CXX_COMPILER__Solving_
   OBJECT_DIR = CMakeFiles/Solving_Linear_Equations.dir
   OBJECT_FILE_DIR = CMakeFiles/Solving_Linear_Equations.dir
 
-build CMakeFiles/Solving_Linear_Equations.dir/Matrix.cpp.o: CXX_COMPILER__Solving_Linear_Equations_unscanned_Debug /home/piotr/CLionProjects/Solving$ Linear$ Equations/Matrix.cpp || cmake_object_order_depends_target_Solving_Linear_Equations
-  DEP_FILE = CMakeFiles/Solving_Linear_Equations.dir/Matrix.cpp.o.d
+build CMakeFiles/Solving_Linear_Equations.dir/tasks.cpp.o: CXX_COMPILER__Solving_Linear_Equations_unscanned_Debug /home/piotr/CLionProjects/Solving$ Linear$ Equations/tasks.cpp || cmake_object_order_depends_target_Solving_Linear_Equations
+  DEP_FILE = CMakeFiles/Solving_Linear_Equations.dir/tasks.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always
+  INCLUDES = -I/usr/include/python3.10
+  OBJECT_DIR = CMakeFiles/Solving_Linear_Equations.dir
+  OBJECT_FILE_DIR = CMakeFiles/Solving_Linear_Equations.dir
+
+build CMakeFiles/Solving_Linear_Equations.dir/plots.cpp.o: CXX_COMPILER__Solving_Linear_Equations_unscanned_Debug /home/piotr/CLionProjects/Solving$ Linear$ Equations/plots.cpp || cmake_object_order_depends_target_Solving_Linear_Equations
+  DEP_FILE = CMakeFiles/Solving_Linear_Equations.dir/plots.cpp.o.d
   FLAGS = -g -fdiagnostics-color=always
   INCLUDES = -I/usr/include/python3.10
   OBJECT_DIR = CMakeFiles/Solving_Linear_Equations.dir
@@ -71,7 +78,7 @@ build CMakeFiles/Solving_Linear_Equations.dir/Matrix.cpp.o: CXX_COMPILER__Solvin
 #############################################
 # Link the executable Solving_Linear_Equations
 
-build Solving_Linear_Equations: CXX_EXECUTABLE_LINKER__Solving_Linear_Equations_Debug CMakeFiles/Solving_Linear_Equations.dir/main.cpp.o CMakeFiles/Solving_Linear_Equations.dir/Matrix.cpp.o | /usr/lib/x86_64-linux-gnu/libpython3.10.so
+build Solving_Linear_Equations: CXX_EXECUTABLE_LINKER__Solving_Linear_Equations_Debug CMakeFiles/Solving_Linear_Equations.dir/main.cpp.o CMakeFiles/Solving_Linear_Equations.dir/tasks.cpp.o CMakeFiles/Solving_Linear_Equations.dir/plots.cpp.o | /usr/lib/x86_64-linux-gnu/libpython3.10.so
   FLAGS = -g
   LINK_LIBRARIES = /usr/lib/x86_64-linux-gnu/libpython3.10.so
   OBJECT_DIR = CMakeFiles/Solving_Linear_Equations.dir

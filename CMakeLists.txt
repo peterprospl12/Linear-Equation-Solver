@@ -5,7 +5,11 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(Solving_Linear_Equations main.cpp
         Matrix.h
-        Matrix.cpp)
+        tasks.h
+        plots.h
+        tasks.cpp
+        plots.cpp
+)
 
 find_package(Python COMPONENTS Interpreter Development)
 include_directories(${Python_INCLUDE_DIRS})
