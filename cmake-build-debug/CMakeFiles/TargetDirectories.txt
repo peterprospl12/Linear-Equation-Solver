@@ -1,0 +1,3 @@
+/home/piotr/CLionProjects/Solving Linear Equations/cmake-build-debug/CMakeFiles/Solving_Linear_Equations.dir
+/home/piotr/CLionProjects/Solving Linear Equations/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/piotr/CLionProjects/Solving Linear Equations/cmake-build-debug/CMakeFiles/rebuild_cache.dir
