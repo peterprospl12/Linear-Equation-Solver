@@ -6,7 +6,7 @@
 #include "Matrix.h"
 #include "plots.h"
 
-void task_one(int f, int e, int N) {
+void task_B(int f, int e, int N) {
     Matrix<double> matrix(N, N);
     int a1 = 5 + e;
     create_matrix(matrix, a1, -1, -1);
@@ -23,7 +23,7 @@ void task_one(int f, int e, int N) {
     plot_error_norm(jacobi_file, gs_file, plot_name);
 }
 
-void task_two(int N, int f) {
+void task_C(int N, int f) {
     Matrix<double> matrix(N, N);
     int a1 = 3;
     create_matrix(matrix, a1, -1, -1);
@@ -41,8 +41,8 @@ void task_two(int N, int f) {
     plot_error_norm(jacobi_file, gs_file, plot_name);
 }
 
-void task_three(int f, int e) {
-    std::vector<int> N{100, 500, 1000, 2000, 3000, 5000, 10000, 20000, 50000, 100000};
+void task_E(int f, int e) {
+    std::vector<int> N{100, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 5000, 6000, 7000, 8000, 9000, 10000};
     std::vector<double> LU_error_norms(N.size());
     std::vector<double> LU_durations(N.size());
     std::vector<double> Jacobi_durations(N.size());
@@ -57,8 +57,12 @@ void task_three(int f, int e) {
         create_column_vector(vector, f);
 
         Matrix<double>::jacobi_solution(matrix, vector, size, pow(10, -9), &Jacobi_durations[i]);
+        std::cout << std::endl;
         Matrix<double>::gauss_seidel_solution(matrix, vector, size, pow(10, -9), &GS_durations[i]);
+        std::cout << std::endl;
         Matrix<double>::LU_solution(matrix, vector, &LU_error_norms[i], &LU_durations[i]);
+        std::cout << std::endl;
+
     }
 
     std::fstream file;

@@ -5,11 +5,11 @@ int main() {
     Py_Initialize();
     int f = 2;
     int e = 5;
-    int N = 963;
+    int N = 994;
 
-    task_one(f, e, N);
-    task_two(N, f);
-    //task_three(f, e);
+    task_B(f, e, N);
+    task_C(N, f);
+    task_E(f, e);
 
     Py_Finalize();
     return 0;

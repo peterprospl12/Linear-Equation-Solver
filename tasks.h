@@ -7,11 +7,11 @@
 
 #include "Matrix.h"
 
-void task_one(int f, int e, int N);
+void task_B(int f, int e, int N);
 
-void task_two(int N, int f);
+void task_C(int N, int f);
 
-void task_three(int f, int e);
+void task_E(int f, int e);
 
 void create_matrix(Matrix<double> &matrix, int a1, int a2, int a3);
 
