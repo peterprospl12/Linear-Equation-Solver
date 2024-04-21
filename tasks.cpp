@@ -14,8 +14,12 @@ void task_B(int f, int e, int N) {
     Matrix<double> col_vector(N, 1);
     create_column_vector(col_vector, f);
 
-    Matrix<double>::jacobi_solution(matrix, col_vector, 100, pow(10, -9), nullptr);
-    Matrix<double>::gauss_seidel_solution(matrix, col_vector, 100, pow(10, -9), nullptr);
+    Matrix<double>::jacobi_solution(matrix, col_vector, 1000, pow(10, -9), nullptr);
+    std::cout << std::endl;
+    Matrix<double>::gauss_seidel_solution(matrix, col_vector, 1000, pow(10, -9), nullptr);
+    std::cout << std::endl;
+    Matrix<double>::LU_solution(matrix, col_vector, nullptr, nullptr);
+    std::cout << std::endl;
 
     std::string jacobi_file = "jacobi_error_norm_" + std::to_string(a1) + "_" + std::to_string(N) + ".csv";
     std::string gs_file = "gauss_seidel_error_norm_" + std::to_string(a1) + "_" + std::to_string(N) + ".csv";
@@ -32,8 +36,12 @@ void task_C(int N, int f) {
     create_column_vector(col_vector, f);
 
     Matrix<double>::jacobi_solution(matrix, col_vector, 1000, pow(10, -9), nullptr);
+    std::cout << std::endl;
     Matrix<double>::gauss_seidel_solution(matrix, col_vector, 1000, pow(10, -9), nullptr);
+    std::cout << std::endl;
     Matrix<double>::LU_solution(matrix, col_vector, nullptr, nullptr);
+    std::cout << std::endl;
+
 
     std::string jacobi_file = "jacobi_error_norm_" + std::to_string(a1) + "_" + std::to_string(N) + ".csv";
     std::string gs_file = "gauss_seidel_error_norm_" + std::to_string(a1) + "_" + std::to_string(N) + ".csv";
@@ -68,9 +76,9 @@ void task_E(int f, int e) {
     std::fstream file;
     std::string name = "LU_solution_data.csv";
     file.open(name, std::fstream::out);
-    file << "Size,Duration\n";
+    file << "Size,Duration,Error norms\n";
     for (int i = 0; i < N.size(); i++) {
-        file << N[i] << "," << LU_durations[i] << "\n";
+        file << N[i] << "," << LU_durations[i] << LU_error_norms[i] << "\n";
     }
     file << std::setprecision(std::numeric_limits<double>::max_digits10);
     file.close();

@@ -257,12 +257,9 @@ public:
         double duration;
         start = std::clock();
 
-        std::vector<std::vector<double>> x1(A.getColSize(), std::vector<double>(A.getColSize(), 1));
-        std::vector<std::vector<double>> temp_x1(A.getColSize(), std::vector<double>(A.getColSize(), 1));
         Matrix<T> x(A.getColSize(), 1);
         Matrix<T> temp_x(A.getColSize(), 1);
-        x.matrix = x1;
-        temp_x.matrix = temp_x1;
+
         std::vector<double> error_norms(max_iterations);
         int iteration;
         int size = A.getColSize();
@@ -307,9 +304,7 @@ public:
         double duration;
         start = std::clock();
 
-        std::vector<std::vector<double>> x1(A.getColSize(), std::vector<double>(A.getColSize(), 1));
         Matrix<T> x(A.getColSize(), 1);
-        x.matrix = x1;
         std::vector<double> error_norms(max_iterations);
         int iteration;
         int size = A.getColSize();
@@ -327,7 +322,7 @@ public:
             }
 
             error_norms[iteration] = norm(residuum(A, x, b));
-            if (error_norms[iteration] < error_norm_value) {
+            if (error_norms[iteration] < error_norm_value || std::isinf(error_norms[iteration])) {
                 iteration++;
                 break;
             }
